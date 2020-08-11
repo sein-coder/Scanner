@@ -1,6 +1,8 @@
 package com.example.scanner;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -36,9 +38,9 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
 
         /*장바구니 리스트 데이터 로드*/
         gridView = (GridView)findViewById(R.id.shopping_list_view);
-        final ArrayList items = ((MainActivity)MainActivity.context_main).items;
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,items);
+        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,((MainActivity)MainActivity.context_main).items);
         gridView.setAdapter(adapter);
+        gridView.setSelection(adapter.getCount() -1);
 
         /*총 금액 변경*/
         final int tot_price = ((MainActivity)MainActivity.context_main).tot_price;
@@ -50,11 +52,7 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
         payment_btn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                items.clear();
-                tot_price_textView.setText("총 금액 : 0 원");
-                String str = "결재 완료";
-                adapter.notifyDataSetChanged();
-                Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
+                dialogEvent(view);
             }
         });
 
@@ -130,5 +128,32 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
     public void onTorchOff() {
         switchFlashlightButton.setImageResource(R.drawable.ic_flash_off_white_36dp);
         switchFlashlightButtonCheck = true;
+    }
+
+    /* 결제버튼 클릭시 다이얼로그 이벤트 */
+    public void dialogEvent(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String pay_price = tot_price_textView.getText().toString().split(":")[1];
+        builder.setTitle("결재 창").setMessage("총 금액"+pay_price+"을 결재 하시겠습니까?");
+        builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                /* 아무런 처리 안함 */
+            }
+        });
+        builder.setNegativeButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                ((MainActivity)MainActivity.context_main).items.clear();
+                ((MainActivity)MainActivity.context_main).tot_price = 0;
+                tot_price_textView.setText("총 금액 : 0 원");
+                String str = "결재 완료";
+                adapter.notifyDataSetChanged();
+                Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }
