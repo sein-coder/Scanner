@@ -2,17 +2,21 @@ package com.example.scanner;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
@@ -27,25 +31,29 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
     private ImageButton setting_btn,switchFlashlightButton;
     private Boolean switchFlashlightButtonCheck;
 
-    private GridView gridView;
-    private ArrayAdapter adapter;
+    private ListView listView;
+    private CustomListViewAdapter adapter;
     private TextView tot_price_textView;
+
+    public static Context context_scanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_scanner);
+        context_scanner = this;
 
         /*장바구니 리스트 데이터 로드*/
-        gridView = (GridView)findViewById(R.id.shopping_list_view);
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,((MainActivity)MainActivity.context_main).items);
-        gridView.setAdapter(adapter);
-        gridView.setSelection(adapter.getCount() -1);
+        listView = (ListView)findViewById(R.id.shopping_list_view);
+//        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,((MainActivity)MainActivity.context_main).items);
+        adapter = new CustomListViewAdapter();
+
+        setData();
+        listView.setAdapter(adapter);
+        listView.setSelection(adapter.getCount() -1);
 
         /*총 금액 변경*/
-        final int tot_price = ((MainActivity)MainActivity.context_main).tot_price;
-        tot_price_textView = (TextView)findViewById(R.id.total_price);
-        tot_price_textView.setText("총 금액 : "+new DecimalFormat("###,###").format(tot_price) + " 원");
+        setTot_Price(((MainActivity)MainActivity.context_main).tot_price);
 
         /*결재 버튼 이벤트 리스너 등록*/
         Button payment_btn = (Button)findViewById(R.id.payment_btn);
@@ -134,7 +142,7 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
     public void dialogEvent(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         String pay_price = tot_price_textView.getText().toString().split(":")[1];
-        builder.setTitle("결재 창").setMessage("총 금액"+pay_price+"을 결재 하시겠습니까?");
+        builder.setTitle("결제").setMessage("총 금액"+pay_price+"을 결재 하시겠습니까?");
         builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
@@ -148,6 +156,7 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
                 ((MainActivity)MainActivity.context_main).tot_price = 0;
                 tot_price_textView.setText("총 금액 : 0 원");
                 String str = "결재 완료";
+                adapter.clear();
                 adapter.notifyDataSetChanged();
                 Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
             }
@@ -155,5 +164,22 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public void setData() {
+        ArrayList<ListViewItem> items = ((MainActivity)MainActivity.context_main).items;
+        for(ListViewItem item : items) {
+            adapter.addItem(item);
+        }
+    }
+
+    public void refresh() {
+        adapter.notifyDataSetChanged();
+        setTot_Price(((MainActivity)MainActivity.context_main).tot_price);
+    }
+
+    private void setTot_Price(int tot_price) {
+        tot_price_textView = (TextView)findViewById(R.id.total_price);
+        tot_price_textView.setText("총 금액 : "+new DecimalFormat("###,###").format(tot_price) + " 원");
     }
 }

@@ -62,13 +62,12 @@ d
             android:text="@string/zxing_msg_default_status"
             android:textColor="@color/zxing_status_text" />
 
-        <GridView
+        <ListView
             android:id="@+id/shopping_list_view"
             android:layout_width="match_parent"
             android:layout_height="280dp"
             android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:numColumns="2"/>
+            android:gravity="center" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     public static Context context_main;
-    public static ArrayList<String> items = new ArrayList<String>();
+    public static ArrayList<ListViewItem> items = new ArrayList<ListViewItem>();
     public static int tot_price = 0;
 
     @Override
@@ -68,10 +68,11 @@ public class MainActivity extends AppCompatActivity {
                 String prod_name = cursor.getString(cursor.getColumnIndex("prod_name"));
                 int price = cursor.getInt(cursor.getColumnIndex("price"));
                 if(barcode.equals(re)) {
-                    String result = barcode + " , " + prod_name + " , " + price+"원";
                     tot_price+=price;
-                    items.add(prod_name);
-                    items.add(new DecimalFormat("###,###").format(price)+" 원");
+                    ListViewItem item = new ListViewItem();
+                    item.setProd_name(prod_name);
+                    item.setPrice(price);
+                    items.add(item);
                     break;
                 }
             }
