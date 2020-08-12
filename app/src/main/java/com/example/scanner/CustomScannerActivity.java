@@ -5,18 +5,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
@@ -50,6 +47,12 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
 
         setData();
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                dialogEvent2(view, position);
+            }
+        });
         listView.setSelection(adapter.getCount() -1);
 
         /*총 금액 변경*/
@@ -142,7 +145,7 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
     public void dialogEvent(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         String pay_price = tot_price_textView.getText().toString().split(":")[1];
-        builder.setTitle("결제").setMessage("총 금액"+pay_price+"을 결재 하시겠습니까?");
+        builder.setTitle("결제").setMessage("총 금액"+pay_price+"을 결제 하시겠습니까?");
         builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
@@ -155,10 +158,36 @@ public class CustomScannerActivity extends Activity implements DecoratedBarcodeV
                 ((MainActivity)MainActivity.context_main).items.clear();
                 ((MainActivity)MainActivity.context_main).tot_price = 0;
                 tot_price_textView.setText("총 금액 : 0 원");
-                String str = "결재 완료";
+                String str = "결제 완료";
                 adapter.clear();
                 adapter.notifyDataSetChanged();
                 Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /* 아이템 클릭시 다이얼로그 이벤트 */
+    public void dialogEvent2(final View view, final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        final ListViewItem item = (ListViewItem) adapter.getItem(position);
+        builder.setTitle("상품 취소").setMessage("상품 "+item.getProd_name()+"("+new DecimalFormat("###,###").format(item.getPrice())+")을"+"취소 하시겠습니까?");
+        builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                /* 아무런 처리 안함 */
+            }
+        });
+        builder.setNegativeButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                ((MainActivity)MainActivity.context_main).tot_price -= item.getPrice();
+                ((MainActivity)MainActivity.context_main).items.remove(position);
+                adapter.remove(position);
+                refresh();
+                Toast.makeText(getApplicationContext(), "상품 : " +item.getProd_name()+"가 취소되었습니다.", Toast.LENGTH_LONG).show();
             }
         });
 

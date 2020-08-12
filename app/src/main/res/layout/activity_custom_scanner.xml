@@ -67,7 +67,7 @@ d
             android:layout_width="match_parent"
             android:layout_height="280dp"
             android:layout_gravity="center_horizontal"
-            android:gravity="center" />
+            android:gravity="center"/>
 
         <LinearLayout
             android:layout_width="match_parent"
