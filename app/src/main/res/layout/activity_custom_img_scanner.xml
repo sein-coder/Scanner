@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:orientation="vertical">
+
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            tools:context="org.tensorflow.lite.examples.classification.CameraActivity" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentTop="true"
+            android:background="@color/tfe_semi_transparent">
+        </androidx.appcompat.widget.Toolbar>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#578e5d">
+        </LinearLayout>
+
+        <ImageButton
+            android:padding="7dp"
+            android:background="@null"
+            android:src="@drawable/ic_settings_white_36dp"
+            android:id="@+id/setting_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageButton
+            android:onClick="switchFlashlight"
+            android:padding="7dp"
+            android:background="@null"
+            android:src="@drawable/ic_flash_off_white_36dp"
+            android:id="@+id/switch_flashlight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:background="#578e5d"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/shopping_list_view_tf"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:background="#578e5d"
+                android:gravity="center_vertical"
+                >
+                <Button
+                    android:id="@+id/payment_btn_tf"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:textSize="20dp"
+                    android:textColor="@color/zxing_status_text"
+                    android:background="@color/zxing_viewfinder_mask"
+                    android:text="결제하기"/>
+                <TextView
+                    android:id="@+id/total_price_tf"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="start|center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="20dp"
+                    android:text="총 금액 : "
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+    <include
+        android:id="@+id/bottom_sheet_layout"
+        layout="@layout/tfe_ic_layout_bottom_sheet" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

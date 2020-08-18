@@ -4,6 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".bc.BCMainActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/tf_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#578e5d"
+            android:src="@drawable/tensorflow"
+            android:layout_margin="10dp"/>
+
+        <ImageButton
+            android:id="@+id/bc_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#578e5d"
+            android:src="@drawable/barcode"
+            android:layout_margin="10dp"/>
+
+    </LinearLayout>
+    
+    
 </androidx.constraintlayout.widget.ConstraintLayout>
