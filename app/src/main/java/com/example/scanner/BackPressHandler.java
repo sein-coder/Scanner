@@ -15,6 +15,7 @@ public class BackPressHandler {
     }
 
     public void onBackPressed() {
+        activity.finish();
         Intent intent = new Intent(activity, MainActivity.class) ;
         activity.startActivity(intent) ;
     }

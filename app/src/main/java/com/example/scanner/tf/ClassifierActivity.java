@@ -118,8 +118,6 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
                         if(!regProd.keySet().contains(title)) regProd.put(title, 1);
                         else regProd.put(title, regProd.get(title)+1);
 
-                        System.out.println(regProd);
-
                         if(regProd.get(title) >= 30) {
                           regProd.remove(title);
                           dialogConfirm(title);

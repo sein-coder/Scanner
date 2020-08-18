@@ -202,7 +202,6 @@ public abstract class CameraActivity extends AppCompatActivity
 
         /*장바구니 리스트 데이터 로드*/
         listView = (ListView)findViewById(R.id.shopping_list_view_tf);
-//        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,((MainActivity)MainActivity.context_main).items);
         adapter = new CustomListViewAdapter();
 
         setData();
